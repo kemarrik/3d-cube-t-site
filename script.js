@@ -14,14 +14,14 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     100
 );
-camera.position.set(0, 0, 17.5);
+camera.position.set(0, 0, 18.5);
 
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
     alpha: false
 });
-renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
 container.appendChild(renderer.domElement);
 
 // --------------------------------------------------
@@ -30,15 +30,15 @@ container.appendChild(renderer.domElement);
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.95);
 scene.add(ambientLight);
 
-const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.15);
+const dirLight1 = new THREE.DirectionalLight(0xffffff, 1.1);
 dirLight1.position.set(8, 10, 12);
 scene.add(dirLight1);
 
-const dirLight2 = new THREE.DirectionalLight(0xbfcfff, 0.35);
+const dirLight2 = new THREE.DirectionalLight(0xbfcfff, 0.3);
 dirLight2.position.set(-8, -5, 8);
 scene.add(dirLight2);
 
-const pointLight = new THREE.PointLight(0xffffff, 0.65, 100);
+const pointLight = new THREE.PointLight(0xffffff, 0.55, 100);
 pointLight.position.set(0, 0, 9);
 scene.add(pointLight);
 
@@ -72,14 +72,13 @@ const tMaterial = new THREE.MeshStandardMaterial({
 });
 
 // --------------------------------------------------
-// ИДЕАЛЬНЫЙ УГОЛ КУБА
-// Каждый угол = 3 тонкие прямые,
-// которые пересекаются в одной точке
+// УГОЛ КУБА
+// Каждый угол = 3 очень тонкие прямые,
+// сходящиеся в одной точке
 // --------------------------------------------------
 function createCorner(signX, signY, signZ, armLength, thickness, material) {
     const group = new THREE.Group();
 
-    // Палка по X: идет от точки угла к центру куба
     const xBar = new THREE.Mesh(
         new THREE.BoxGeometry(armLength, thickness, thickness),
         material
@@ -87,7 +86,6 @@ function createCorner(signX, signY, signZ, armLength, thickness, material) {
     xBar.position.set(-signX * armLength / 2, 0, 0);
     group.add(xBar);
 
-    // Палка по Y
     const yBar = new THREE.Mesh(
         new THREE.BoxGeometry(thickness, armLength, thickness),
         material
@@ -95,7 +93,6 @@ function createCorner(signX, signY, signZ, armLength, thickness, material) {
     yBar.position.set(0, -signY * armLength / 2, 0);
     group.add(yBar);
 
-    // Палка по Z
     const zBar = new THREE.Mesh(
         new THREE.BoxGeometry(thickness, thickness, armLength),
         material
@@ -108,11 +105,11 @@ function createCorner(signX, signY, signZ, armLength, thickness, material) {
 
 // --------------------------------------------------
 // КУБ ИЗ 8 УГЛОВ
-// Очень тонкие линии, точное схождение в вершине
+// ЛИНИИ СТАЛИ СИЛЬНО ТОНЬШЕ
 // --------------------------------------------------
-const cubeHalfSize = 3.25;
-const armLength = 1.45;
-const armThickness = 0.038;
+const cubeHalfSize = 3.2;
+const armLength = 1.5;
+const armThickness = 0.018;
 
 const signs = [-1, 1];
 
@@ -131,9 +128,7 @@ for (const sx of signs) {
 }
 
 // --------------------------------------------------
-// ИДЕАЛЬНАЯ ЦЕЛЬНАЯ ОБЪЕМНАЯ БУКВА T
-// Это одна сплошная extrude-геометрия,
-// а не прямоугольник на прямоугольнике
+// ЦЕЛЬНАЯ ОБЪЕМНАЯ БУКВА T
 // --------------------------------------------------
 function createSolidT() {
     const topWidth = 3.2;
@@ -168,8 +163,7 @@ function createSolidT() {
 
     geometry.center();
 
-    const mesh = new THREE.Mesh(geometry, tMaterial);
-    return mesh;
+    return new THREE.Mesh(geometry, tMaterial);
 }
 
 const solidT = createSolidT();
@@ -194,16 +188,13 @@ function animate() {
 
     const t = clock.getElapsedTime();
 
-    // Легкое общее живое движение
     mainGroup.rotation.y = Math.sin(t * 0.30) * 0.12;
     mainGroup.rotation.x = Math.cos(t * 0.22) * 0.06;
 
-    // Куб
     cubeCornersGroup.rotation.y += 0.0058;
     cubeCornersGroup.rotation.x += 0.0030;
     cubeCornersGroup.rotation.z += 0.0018;
 
-    // Буква T
     letterTGroup.rotation.y -= 0.0095;
     letterTGroup.rotation.x -= 0.0034;
     letterTGroup.rotation.z += 0.0023;
@@ -216,10 +207,12 @@ animate();
 // --------------------------------------------------
 // RESIZE
 // --------------------------------------------------
-window.addEventListener('resize', () => {
+function onResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-});
+}
+
+window.addEventListener('resize', onResize);
+onResize();
