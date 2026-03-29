@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #050505;
+    font-family: Arial, sans-serif;
+}
+
+#scene-container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background:
+        radial-gradient(circle at center, rgba(30, 30, 30, 0.35) 0%, rgba(5, 5, 5, 0.95) 55%, #020202 100%);
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
