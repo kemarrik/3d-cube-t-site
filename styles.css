@@ -4,12 +4,24 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: #050505;
 }
 
 body {
     position: fixed;
     inset: 0;
+    background:
+        radial-gradient(circle at center, rgba(35, 35, 35, 0.35) 0%, rgba(10, 10, 10, 0.92) 52%, #020202 100%);
+}
+
+#page-bg {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 22%, rgba(0, 0, 0, 0) 45%),
+        linear-gradient(180deg, #0a0a0a 0%, #050505 55%, #020202 100%);
+    z-index: 0;
 }
 
 #scene-container {
@@ -18,8 +30,7 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
-    background:
-        radial-gradient(circle at center, rgba(22, 22, 22, 0.22) 0%, rgba(5, 5, 5, 0.95) 55%, #020202 100%);
+    z-index: 1;
 }
 
 canvas {
@@ -28,4 +39,5 @@ canvas {
     display: block;
     width: 100vw !important;
     height: 100vh !important;
+    background: transparent !important;
 }

@@ -6,7 +6,6 @@ const container = document.getElementById('scene-container');
 // СЦЕНА / КАМЕРА / РЕНДЕР
 // --------------------------------------------------
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x050505);
 
 const camera = new THREE.PerspectiveCamera(
     42,
@@ -18,10 +17,11 @@ camera.position.set(0, 0, 18.5);
 
 const renderer = new THREE.WebGLRenderer({
     antialias: true,
-    alpha: false
+    alpha: true
 });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
 container.appendChild(renderer.domElement);
 
 // --------------------------------------------------
@@ -73,8 +73,8 @@ const tMaterial = new THREE.MeshStandardMaterial({
 
 // --------------------------------------------------
 // УГОЛ КУБА
-// Каждый угол = 3 очень тонкие прямые,
-// сходящиеся в одной точке
+// 3 линии + маленький кубик в вершине,
+// чтобы не было дырки в углу
 // --------------------------------------------------
 function createCorner(signX, signY, signZ, armLength, thickness, material) {
     const group = new THREE.Group();
@@ -100,16 +100,23 @@ function createCorner(signX, signY, signZ, armLength, thickness, material) {
     zBar.position.set(0, 0, -signZ * armLength / 2);
     group.add(zBar);
 
+    // Закрывает маленькую пустоту в общей точке пересечения
+    const jointCube = new THREE.Mesh(
+        new THREE.BoxGeometry(thickness, thickness, thickness),
+        material
+    );
+    jointCube.position.set(0, 0, 0);
+    group.add(jointCube);
+
     return group;
 }
 
 // --------------------------------------------------
 // КУБ ИЗ 8 УГЛОВ
-// ЛИНИИ СТАЛИ СИЛЬНО ТОНЬШЕ
 // --------------------------------------------------
 const cubeHalfSize = 3.2;
 const armLength = 1.5;
-const armThickness = 0.018;
+const armThickness = 0.014;
 
 const signs = [-1, 1];
 
